@@ -18,15 +18,15 @@ tessel.findTessel(null, true, function(err, client) {
       client.stderr.pipe(process.stderr);
       console.info('Running script...');
 
-      var count = 0;
+      client.interface.writeProcessMessage('message');
 
-      setInterval(function(){
-        console.log('ping');
-        client.interface.writeProcessMessage({count:count++, data: {foo: 'bar'}});
-        client.once('message', function (m) {
-          console.log('pong', m.count);
-        });
-      }, 1000);
+      // setInterval(function(){
+      //   console.log('ping');
+      //   client.interface.writeProcessMessage({count:count++, data: {foo: 'bar'}});
+      //   client.once('message', function (m) {
+      //     console.log('pong', m.count);
+      //   });
+      // }, 1000);
 
       // Stop on Ctrl+C.
       process.on('SIGINT', function() {
