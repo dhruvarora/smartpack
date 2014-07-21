@@ -4,8 +4,12 @@ var https = require("https");
 var rfidlib = require('rfid-pn532');
 var rfid = rfidlib.use(tessel.port['A']);
 
+// var twilioText = require('./twilioText.js');
+
 var masterpackDBString = '';
 var masterpackDB;
+var localpackDB  = {};
+
 
 var req = https.get('https://smartpack.firebaseio.com/masterpack.json', function(res) {
   console.log("Status Code:", res.statusCode);
@@ -35,11 +39,14 @@ var rfidRead = function() {
         console.log(masterpackDB[cardIDString[1]]);
         if (masterpackDB[cardIDString][1]) {
           console.log('You added your ' + masterpackDB[cardIDString][0]);
+          localpackDB[cardIDString] = masterpackDB[cardIDString];
+          localpackDB[cardIDString][1] = true;
         } else {
           console.log('You removed your ' + masterpackDB[cardIDString][0]);
+          // twilioText(masterpackDB[cardIDString][0]);
         }
       } else {
-        console.log('MasterpackDBString came back empty!');
+        console.log('You done goofed!');
       }
     });
   });
